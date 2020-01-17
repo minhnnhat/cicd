@@ -1,14 +1,14 @@
 pipeline {
     agent { label 'master'}
     environment {
-        registry = "docker-registry.ranchers.xyz/test-deploy"
+        registry = "docker-registry.ranchers.xyz/minh-test-deploy"
         registryCredential = 'docker-registry'
         dockerImage = ''
     }
     stages{
         stage("Git clone"){
             steps {
-                git 'https://github.com/kemallaydin/Configuring-CI-CD-on-Kubernetes-with-Jenkins.git'
+                git 'https://github.com/minhnnhat/cicd.git'
             }
         }
         stage('Building image') {
@@ -21,11 +21,24 @@ pipeline {
         stage('Deploy Image') {
             steps{
                script {
-                  docker.withRegistry( '', registryCredential ) {
+                  withDockerRegistry(credentialsId: 'docker-registry', url: 'http://docker-registry.ranchers.xyz/') {
                   dockerImage.push()
                   }
                }
             }
         }
+        stage('Remove unused docker image') {
+            steps{
+               sh "docker rmi $registry:$BUILD_NUMBER"
+            }
+    }
+        stage('Deploy on k8s') {
+            steps{
+                withKubeConfig([credentialsId: 'config']) {
+                sh 'cat deployment.yaml | sed "s/{{BUILD_NUMBER}}/$BUILD_NUMBER/g" | kubectl apply -f -'
+                sh 'kubectl apply -f service.yaml'
+            }
+        }
     }
 }
+
