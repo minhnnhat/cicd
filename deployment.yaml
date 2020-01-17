@@ -17,8 +17,6 @@ spec:
       containers:
       - name: podinfo
         image: docker-registry.ranchers.xyz/minh-test-deploy:BUILD_NUMBER
-        imagePullSecrets:
-        - name: regcred
         ports:
         - containerPort: 4444
         env:
@@ -42,3 +40,5 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.serviceAccountName
+      imagePullSecrets:
+      - name: regcred
