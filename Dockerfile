@@ -1,9 +1,6 @@
 FROM node:10-alpine
-# setup proxies
-RUN npm config set strict-ssl=false && \
-    npm config set registry=http://registry.npmjs.org/ && \
-    npm config set proxy=http://210.245.31.16:80/ && \
-    npm config set https-proxy=http://210.245.31.16:80/
+ENV http_proxy http://proxy.hcm.fpt.vn:80/
+ENV https_proxy http://proxy.hcm.fpt.vn:80/
 RUN mkdir /app
 COPY index.js /app
 WORKDIR /app
