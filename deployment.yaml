@@ -17,9 +17,9 @@ spec:
       containers:
       - name: podinfo
         image: docker-registry.ranchers.xyz/minh-test-deploy:BUILD_NUMBER
-          valueFrom:
-            fieldRef:
-              fieldPath: spec.nodeName
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4444
         - name: MY_POD_NAME
           valueFrom:
             fieldRef:
