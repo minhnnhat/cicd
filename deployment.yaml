@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: podinfo
-        image: docker-registry.ranchers.xyz/minh-test-deploy:{{BUILD_NUMBER}}
+        image: docker-registry.ranchers.xyz/minh-test-deploy:BUILD_NUMBER
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
