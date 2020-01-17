@@ -1,6 +1,10 @@
 FROM node:10-alpine
-ENV http_proxy http://210.245.31.16:80/
-ENV https_proxy http://210.245.31.16:80/
+# setup proxies
+RUN git config --global http.proxy http://210.245.31.16:80/ && \
+    npm config set strict-ssl=false \
+    npm config set registry=http://registry.npmjs.org/ \
+    npm config set proxy=http://210.245.31.16:80/ && \
+    npm config set https-proxy=http://210.245.31.16:80/
 RUN mkdir /app
 COPY index.js /app
 WORKDIR /app
